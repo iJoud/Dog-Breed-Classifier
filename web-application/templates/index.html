@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Dog Breed Classifier</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N"
+        crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Dog Breed Classifier</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link" href="https://www.udacity.com/">Made with Udacity</a>
+                    <a class="nav-link" href="https://github.com/iJoud">Contact</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <br>
+
+    <div class="container my-5">
+        <div class="bg-body-tertiary p-5 rounded">
+            <div class="col-sm-8 py-5 mx-auto">
+                <h1 class="display-5 fw-normal">Welcome to my Dog Breeds Classifier App!</h1>
+                <p class="fs-5">In this project, I've trained a CNN for dog breed classification task as a capston
+                    project
+                    for the Data Scientist Nanodegree. </p>
+                <p>I've trained multiple neural networks for this task, If you're intreseted to see the technical
+                    details and the proceesses, code, and all the trained models with its results, you can check <a
+                        href="https://github.com/iJoud/Dog-Breed-Classifier">this github repository</a>. However, you
+                    can try the best model I got on this web page!</p>
+                <p>
+                    <a class="btn btn-primary" href="#results" role="button">Try the Model »</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="container" style="margin-bottom: 3cm;"> </div>
+
+    <hr />
+    <br>
+
+    <div class="container" style="margin-bottom: 2cm;"> </div>
+    <div class="container">
+        <h2 class="text-center">Try the Classifier with Your Own Images</h2>
+        <p class="text-center">Upload an Image to Try my Dog Breeds Classifier Model</p>
+
+        <div class="row">
+            <form method="POST" action="http://localhost:8000/prediction" enctype="multipart/form-data"
+                id="upload_form">
+                <div class="mb-3">
+                    <label for="formFile" class="form-label">Upload an Image</label>
+                    <input class="form-control" type="file" id="formFile" name="uploaded_image">
+                </div>
+                <input class="btn btn-primary" type="submit" value="Predict Breed">
+            </form>
+            <br><br><br><br><br><br><br>
+
+            <div class="container" id="results">
+
+                <h3 id="prediction">
+                    </h1><br>
+                    <img class="img-thumbnail" src="" id="image" />
+
+            </div>
+
+            <div class="container" style="margin-bottom: 3cm;"> </div>
+
+
+            <script>
+                $(function () {
+
+                    var form = $('#upload_form');
+
+                    // send ajax request to retrive the prediction for the submitted image
+                    form.submit(function (e) {
+
+                        e.preventDefault();
+
+                        // create form with the image as data to pass in the ajax request
+                        let formData = new FormData(document.getElementById('upload_form'));
+
+                        jQuery.ajax({
+                            type: form.attr('method'),
+                            url: form.attr('action'),
+                            data: formData,
+                            cache: false,
+                            processData: false,
+                            contentType: false,
+                            type: 'POST',
+                            success: function (data, r, h) {
+                                // read the returned json file 
+                                prediction = JSON.parse(data)
+                                // read image path and prediction
+                                predicted_label = prediction['prediction']
+                                image_path = prediction['uploaded_image']
+                                // display the predictions
+                                $("#prediction").html(predicted_label);
+                                $('#image').attr('src', image_path);
+                                // scroll down the page for user to see the result
+                                $('html, body').animate({
+                                    scrollTop: $("#results").offset().top
+                                }, 20);
+                            },
+                            error: function (data, r, h) {
+                                alert('Make Sure You Uploaded a Valid Image')
+                            }
+                        });
+                    });
+                });
+
+            </script>
+
+</body>
+
+</html>
