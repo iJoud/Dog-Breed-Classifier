@@ -47,7 +47,6 @@ In this project, I completed the capstone project for my Data Scientist Nanodegr
     ├── requirements.txt                     # Requirements to run the project
     └── dog_names                            # JSON file contains the list of dog breeds names 
     
-    
     - README.md
     - LICENSE.txt
 
